@@ -1,29 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<install version="1.5" type="plugin" group="content" method="upgrade">
+<extension version="1.5" type="plugin" group="content" method="upgrade">
 	<name>Content - External Link Target</name>
 	<author>Benjamin / JoniJnm</author>
 	<creationDate>3 Mar 2011</creationDate>
 	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
 	<authorUrl>/www.jonijnm.es</authorUrl>
-	<version>0.1</version>
+	<version>0.2</version>
 	<description>External Links Target</description>
 	<files>
 		<filename plugin="external_links_target">external_links_target.php</filename>
 	</files>
-	<params>
-<!--
-		<param type="text" size="63" name="url" default="plugins/content/external_links/frameset.php?url=%s" label="Redirect to a Url" description="Redirect the URLs to a custom link. %s is the url" />
-		<param type="text" name="article_id" default="" label="Redirect to article ID" description="You can redirect the links to an article, where say something lik 'You will visit other page....'" />
-		<param type="text" size="63" name="add" default="&lt;br /&gt;&lt;a href=&quot;%s&quot; rel=&quot;nofollow&quot;&gt;Visit the page&lt;/a&gt;" label="Text to add" description="Text to add in the end of the article. %s is the url" />
-		<param type="text" name="no_link" default="no_link=1" label="No link" description="If the url has 'no_link=1' the link wont be converted" />
--->
-		<param type="list" name="external_links" default="1" label="Add target=&quot;_blank&quot; to external links" description="External links will open in a seperate page">
-			<option value="0">No</option>
-			<option value="1">Yes</option>
-		</param>
-		<param type="list" name="downloadable_links" default="1" label="Add target=&quot;_blank&quot; to downloadable links" description="Uses the extension list in configuration.php / Media: Allowed Extensions.">
-			<option value="0">No</option>
-			<option value="1">Yes</option>
-		</param>
-	</params>
-</install>
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field type="list" name="external_links" default="1" label="Add target=&quot;_blank&quot; to external links" description="External links will open in a seperate page">
+					<option value="0">No</option>
+					<option value="1">Yes</option>
+				</field>
+				<field type="list" name="downloadable_links" default="1" label="Add target=&quot;_blank&quot; to downloadable links" description="Uses the extension list in configuration.php / Media: Allowed Extensions.">
+					<option value="0">No</option>
+					<option value="1">Yes</option>
+				</field>
+			</fieldset>
+		</fields>
+	</config>
+	<updateservers>
+    	 <!--   <server type="extension" priority="1" name="Github Project Page">http://example.com/extension.xml</server> -->
+	</updateservers>
+</extension>

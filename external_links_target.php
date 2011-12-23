@@ -9,6 +9,7 @@
 
 defined( '_JEXEC' ) or die('Restricted access');
 
+jimport( 'joomla.plugin.plugin');
 class plgContentExternal_links_target extends JPlugin {
 
 	private $host;
@@ -44,15 +45,11 @@ class plgContentExternal_links_target extends JPlugin {
 		return $link;
 	}
 
-	function onPrepareContent( &$row, &$articleParams, $page=0 ) {
+	function onContentPrepare($context, &$row, &$articleParams, $page=0 ) {
+	
 		// init
-		static $params;
 		static $paramsComMedia;
 
-		if (!is_object($params)){
-			$plugin =& JPluginHelper::getPlugin('content', 'external_links_target');
-			$params = new JParameter($plugin->params);
-		}
 		if (!is_object($paramsComMedia)) {
 			$paramsComMedia =& JComponentHelper::getParams( 'com_media' );
 		}
@@ -60,18 +57,27 @@ class plgContentExternal_links_target extends JPlugin {
 		$this->host = substr($_SERVER['HTTP_HOST'], 0, 4) == 'www.' ? substr($_SERVER['HTTP_HOST'], 4) : $_SERVER['HTTP_HOST'];
 
 	#var_dump($this);
-	
-		// External Links	
-		if ($params->get("external_links"))
-		{
-			$row->text = preg_replace_callback('#<a[^>]*?href="https?://(?:www\.)?([^"/>]+)(?:/[^">]*)?"[^>]*>#', array($this, 'change_external'), $row->text);
-		}
-		if ($params->get("downloadable_links"))
-		{
-			$row->text = preg_replace_callback('#<a[^>]*?href="[^">]+\.([a-zA-Z]{3})"[^>]*>#', array($this, 'change_downloadable'), $row->text); # TODO can only contain preg_quote($this->host) or relative URL
-		}
+		if (is_object($row))
+			$row->text = $this->process($row->text);
+		else
+			$row = $this->process($row);
+			
 		
 		return true;
+	}
+	
+	function process($text)
+	{
+		// External Links	
+		if ($this->params->get("external_links"))
+		{
+			$text = preg_replace_callback('#<a[^>]*?href="https?://(?:www\.)?([^"/>]+)(?:/[^">]*)?"[^>]*>#', array($this, 'change_external'), $text);
+		}
+		if ($this->params->get("downloadable_links"))
+		{
+			$text = preg_replace_callback('#<a[^>]*?href="[^">]+\.([a-zA-Z]{3})"[^>]*>#', array($this, 'change_downloadable'), $text); # TODO can only contain preg_quote($this->host) or relative URL
+		}
+		return $text;
 	}
 }
 ?>
